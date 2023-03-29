@@ -43,8 +43,9 @@ public static class Operators {
             if (observer.Messages.Count != expectedNotifications.Length)
                 throw new AssertionException(string.Format(OperatorResources.NotificationCountMismatch, expectedNotifications.Length, observer.Messages.Count));
 
+            var comparer = new RecordedEqualityComparer<Notification<T>>(new NotificationEqualityComparer<T>());
             for (var i = 0; i < observer.Messages.Count; i++) {
-                if (!RecordedEqualityComparer<Notification<T>>.Default.Equals(observer.Messages[i], expectedNotifications[i]))
+                if (!comparer.Equals(observer.Messages[i], expectedNotifications[i]))
                     throw new AssertionException(string.Format(OperatorResources.NotificationInequality, i + 1, expectedNotifications[i], observer.Messages[i]));
             }
         });

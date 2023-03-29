@@ -13,6 +13,15 @@ public class MarbleDiagram<T> {
     /// Initializes a new <see cref="MarbleDiagram{T}"/>.
     /// </summary>
     /// <param name="diagram">The string representation of the produced events.</param>
+    public MarbleDiagram(string diagram) {
+        _diagram = diagram;
+        _legend = new { };
+    }
+
+    /// <summary>
+    /// Initializes a new <see cref="MarbleDiagram{T}"/>.
+    /// </summary>
+    /// <param name="diagram">The string representation of the produced events.</param>
     /// <param name="legend">An object providing the values for the events in the diagram.</param>
     public MarbleDiagram(string diagram, object legend) {
         if (legend.GetType().GetRuntimeProperties().Any(p => p.PropertyType != typeof(T) && p.PropertyType.IsAssignableTo(typeof(Exception))))
@@ -20,6 +29,12 @@ public class MarbleDiagram<T> {
         _diagram = diagram;
         _legend = legend;
     }
+
+    /// <summary>
+    /// Casts the given <see cref="string"/> to a <see cref="MarbleDiagram{T}"/>.
+    /// </summary>
+    /// <param name="diagram">The string representation of the produced events.</param>
+    public static implicit operator MarbleDiagram<T>(string diagram) => new(diagram);
 
     /// <summary>
     /// Casts the given tuple to a <see cref="MarbleDiagram{T}"/>.
