@@ -1,4 +1,5 @@
 ﻿using System.Reactive;
+using System.Reflection;
 
 namespace Acumen;
 
@@ -12,10 +13,32 @@ class NotificationEqualityComparer<T> : IEqualityComparer<Notification<T>> {
         x.Kind switch {
             NotificationKind.OnCompleted => y.Kind == NotificationKind.OnCompleted,
             NotificationKind.OnError => y.Kind == NotificationKind.OnError && Equals(x.Exception, y.Exception),
-            _ => y.Kind == NotificationKind.OnNext && typeof(T).IsAssignableTo(typeof(IEnumerable<T>))
-                ? ((IEnumerable<T>)x.Value).SequenceEqual((IEnumerable<T>)y.Value)
-                : Equals(x.Value, y.Value)
+            _ => y.Kind == NotificationKind.OnNext && (TryCompareEnumerable(x.Value, y.Value) || CompareDiscrete(x.Value, y.Value))
         };
+
+    static bool TryCompareEnumerable(T x, T y) {
+        var type = typeof(T);
+
+        if (type.GenericTypeArguments.Length == 1 && type.IsAssignableTo(typeof(IEnumerable<>).MakeGenericType(type.GenericTypeArguments))) {
+            var sequenceEqual = typeof(Enumerable).GetRuntimeMethods().First(m => m.Name == "SequenceEqual").MakeGenericMethod(type.GenericTypeArguments);
+            return (bool)sequenceEqual.Invoke(null, new object[] { x, y }); 
+        }
+
+        if (type.IsArray) {
+            var sequenceEqual = typeof(Enumerable).GetRuntimeMethods().First(m => m.Name == "SequenceEqual").MakeGenericMethod(type.GetElementType()!);
+            return (bool)sequenceEqual.Invoke(null, new object[] { x, y });
+        }
+
+        return false;
+    }
+    static bool CompareDiscrete(T x, T y) => Equals(x, y);
+    
+    static bool IsEnumerable() {
+        var type = typeof(T);
+        return type.GenericTypeArguments.Length == 1
+            ? type.IsAssignableTo(typeof(IEnumerable<>).MakeGenericType(type.GenericTypeArguments[0]))
+            : type.IsArray;
+    }
 
     /// <summary>Returns a hash code for the specified object.</summary>
     /// <param name="obj">The <see cref="T:System.Object" /> for which a hash code is to be returned.</param>
