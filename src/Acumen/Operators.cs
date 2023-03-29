@@ -30,7 +30,7 @@ public static class Operators {
     /// <param name="observable">The observable to assert.</param>
     /// <param name="toBe">The <see cref="MarbleDiagram{T}"/> of the events that are expected to be produced by the asserted observable.</param>
     /// <exception cref="AssertionException">Thrown when the asserted observable does not match the expected marble diagram.</exception>
-    public static void Expect<T>(IObservable<T> observable, MarbleDiagram<T> toBe) {
+    public static void ExpectObservable<T>(IObservable<T> observable, MarbleDiagram<T> toBe) {
         TestSchedulerScope.Current.ScheduleAssertion(scheduler => {
             Recorded<Notification<T>>[]  expectedNotifications = toBe;
             
