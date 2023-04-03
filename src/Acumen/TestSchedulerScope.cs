@@ -5,13 +5,13 @@ using Microsoft.Reactive.Testing;
 
 namespace Acumen;
 
-sealed class TestSchedulerScope : IDisposable {
+public sealed class TestSchedulerScope : IDisposable {
     readonly List<Action<TestScheduler>> _assertions = new();
 
     /// <summary>
     /// Gets the <see cref="TestScheduler"/> associated with this scope.
     /// </summary>
-    internal TestScheduler Scheduler { get; } = new();
+    public TestScheduler Scheduler { get; } = new();
 
     /// <summary>
     /// Schedules the given <see cref="Action"/> to run 
