@@ -10,9 +10,8 @@ static class ExtensionsForImmutableStack {
     /// <param name="stack">The stack to attempt to peek.</param>
     /// <param name="value">The value on top of the stack, if the peek was successful.</param>
     /// <returns><c>true</c> if the stack was successfully peeked, otherwise <c>false</c>.</returns>
-    public static bool TryPeek<T>(this ImmutableStack<T> stack, out T value) {
-        var isEmpty = stack?.IsEmpty ?? true;
-        value = isEmpty ? default(T) : stack.Peek();
-        return !isEmpty;
+    public static bool TryPeek<T>(this ImmutableStack<T> stack, out T? value) {
+        value = stack.IsEmpty ? default : stack.Peek();
+        return !stack.IsEmpty;
     }
 }
