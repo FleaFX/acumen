@@ -1,0 +1,29 @@
+# Publish workflow for GitHub actions
+
+name: Publish package
+
+on:
+    workflow_run:
+        workflows: ["Build & test"]
+        branches: [ "main" ]
+        types:
+        - completed
+
+jobs:
+    publish:
+    
+        runs-on: ubuntu-latest
+
+        steps:
+        - uses: actions/checkout@v3
+  
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: '8.0.x'
+
+        - name: Pack
+          run: dotnet pack -p:PackageId="${{ vars.NUGETPACKID }}" -p:Description="${{ vars.NUGETPACKDESCRIPTION }}" -p:Authors="${{ vars.NUGETPACKAUTHORS }}" -p:Copyright="${{ vars.NUGETPACKCOPYRIGHT }}" -p:PackageProjectUrl="${{ vars.NUGETPACKPROJECTURL }}" -c Release src/Acumen/
+
+        - name: Push
+          run: dotnet nuget push src/Acumen/bin/Release/Acumen.*.nupkg -k ${{ secrets.NUGETAPIKEY }} -s ${{ vars.NUGETPUSHSOURCE }} --skip-duplicate

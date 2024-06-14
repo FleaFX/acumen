@@ -32,7 +32,8 @@ public static class Operators {
     /// <exception cref="AssertionException">Thrown when the asserted observable does not match the expected marble diagram.</exception>
     public static void ExpectObservable<T>(IObservable<T> observable, MarbleDiagram<T> toBe) {
         TestSchedulerScope.Current.ScheduleAssertion(scheduler => {
-            Recorded<Notification<T>>[]  expectedNotifications = toBe;
+            Recorded<Notification<T>>[] expectedNotifications = toBe;
+            Recorded<Action>[] expectedSideEffects = toBe;
             
             var end = expectedNotifications.Last().Time + 1000;
             
@@ -47,6 +48,11 @@ public static class Operators {
             for (var i = 0; i < observer.Messages.Count; i++) {
                 if (!comparer.Equals(observer.Messages[i], expectedNotifications[i]))
                     throw new AssertionException(string.Format(OperatorResources.NotificationInequality, i + 1, expectedNotifications[i], observer.Messages[i]));
+            }
+
+            // run the side effect assertions
+            foreach (var expectedSideEffect in expectedSideEffects) {
+                expectedSideEffect.Value();
             }
         });
     }
