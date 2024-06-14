@@ -26,4 +26,4 @@ jobs:
           run: dotnet pack -p:PackageId="${{ vars.NUGETPACKID }}" -p:Description="${{ vars.NUGETPACKDESCRIPTION }}" -p:Authors="${{ vars.NUGETPACKAUTHORS }}" -p:Copyright="${{ vars.NUGETPACKCOPYRIGHT }}" -p:PackageProjectUrl="${{ vars.NUGETPACKPROJECTURL }}" -c Release src/Acumen/
 
         - name: Push
-          run: dotnet nuget push src/Acumen/bin/Release/Acumen.*.nupkg -k ${{ secrets.NUGETAPIKEY }} -s ${{ vars.NUGETPUSHSOURCE }} --skip-duplicate
+          run: dotnet nuget push src/Acumen/bin/Release/AcumenRx.*.nupkg -k ${{ secrets.NUGETAPIKEY }} -s ${{ vars.NUGETPUSHSOURCE }} --skip-duplicate
