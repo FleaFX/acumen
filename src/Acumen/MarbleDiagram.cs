@@ -2,6 +2,7 @@
 using System.Reflection;
 using Acumen.Resources;
 using Microsoft.Reactive.Testing;
+using Xunit.Sdk;
 
 namespace Acumen; 
 
@@ -76,6 +77,9 @@ public class MarbleDiagram<T> {
 
                 case '|':
                     yield return new Recorded<Notification<T>>(steps * unitOfTime, Notification.CreateOnCompleted<T>());
+                    break;
+
+                case '!':
                     break;
 
                 default: {
