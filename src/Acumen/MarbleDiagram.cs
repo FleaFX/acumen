@@ -80,16 +80,16 @@ public class MarbleDiagram<T> {
                     break;
 
                 case '!':
-                    break;
+                    continue;
 
                 default: {
                     if (_diagram[i + 1] == '!')
-                        break;
+                        continue;
 
                     var property = legend.Single(p => p.Name.Equals(frame.ToString(), StringComparison.OrdinalIgnoreCase));
                     yield return new Recorded<Notification<T>>(steps * unitOfTime,
                         Notification.CreateOnNext((T)property.GetValue(_legend)!));
-                    break;
+                    continue;
                 }
             }
         }
@@ -109,16 +109,18 @@ public class MarbleDiagram<T> {
 
                 case '#':
                 case '|':
-                case '!':
                     break;
+
+                case '!':
+                    continue;
 
                 default: {
                     if (_diagram[i + 1] != '!')
-                        break;
+                        continue;
 
                     var property = legend.Single(p => p.Name.Equals(frame.ToString(), StringComparison.OrdinalIgnoreCase));
                     yield return new Recorded<Action>(steps * unitOfTime, (Action)property.GetValue(_legend)!);
-                    break;
+                    continue;
                 }
             }
         }
