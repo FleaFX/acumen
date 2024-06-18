@@ -83,7 +83,7 @@ public class MarbleDiagram<T> {
                     continue;
 
                 default: {
-                    if (_diagram.Length == i + 1 || _diagram[i + 1] == '!')
+                    if (i < _diagram.Length && _diagram[i + 1] == '!')
                         continue;
 
                     var property = legend.Single(p => p.Name.Equals(frame.ToString(), StringComparison.OrdinalIgnoreCase));
