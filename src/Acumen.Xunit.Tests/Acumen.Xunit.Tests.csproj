@@ -1,13 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace(".Tests",""))</RootNamespace>
+    <RootNamespace>Acumen</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Acumen\Acumen.csproj" />
+    <Compile Include="..\Acumen.Tests.Shared\**\*.cs" Link="Shared\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Acumen.Xunit\Acumen.Xunit.csproj" />
   </ItemGroup>
 
 </Project>

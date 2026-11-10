@@ -2,7 +2,6 @@
 using System.Reflection;
 using Acumen.Resources;
 using Microsoft.Reactive.Testing;
-using Xunit.Sdk;
 
 namespace Acumen; 
 

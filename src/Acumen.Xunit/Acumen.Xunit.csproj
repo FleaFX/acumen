@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Acumen</RootNamespace>
+    <PackageId>AcumenRx.Xunit</PackageId>
+    <Description>xUnit v2 integration for AcumenRx: provides the [MarbleTest] attribute.</Description>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
+    <!-- The xunit meta package marks referencing projects as test projects; this is a library. -->
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="2.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Acumen\Acumen.csproj" />
+  </ItemGroup>
+
+</Project>

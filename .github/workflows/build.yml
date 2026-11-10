@@ -25,7 +25,12 @@ jobs:
           run: dotnet restore src/Acumen.sln
 
         - name: Build
-          run: dotnet build --no-restore src/Acumen.sln
+          run: dotnet build --no-restore -c Release src/Acumen.sln
           
+        # Runs both the xUnit v2 (Acumen.Xunit.Tests) and the xUnit v3 (Acumen.Xunit.v3.Tests) test projects.
         - name: Test
-          run: dotnet test --no-build --verbosity normal src/Acumen.Tests/Acumen.Tests.csproj
+          run: dotnet test --no-build -c Release --verbosity normal src/Acumen.sln
+
+        # Packs AcumenRx, AcumenRx.Xunit and AcumenRx.Xunit.v3 to verify packaging.
+        - name: Pack
+          run: dotnet pack --no-build -c Release -o artifacts src/Acumen.sln
