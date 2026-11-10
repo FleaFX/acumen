@@ -11,7 +11,10 @@ on:
 
 jobs:
     publish:
-    
+
+        # Only publish when the build & test run succeeded.
+        if: github.event.workflow_run.conclusion == 'success'
+
         runs-on: ubuntu-latest
 
         steps:
@@ -22,8 +25,9 @@ jobs:
           with:
             dotnet-version: '8.0.x'
 
+        # PackageId and Description are defined per project; packs AcumenRx, AcumenRx.Xunit and AcumenRx.Xunit.v3.
         - name: Pack
-          run: dotnet pack -p:PackageId="${{ vars.NUGETPACKID }}" -p:Description="${{ vars.NUGETPACKDESCRIPTION }}" -p:Authors="${{ vars.NUGETPACKAUTHORS }}" -p:Copyright="${{ vars.NUGETPACKCOPYRIGHT }}" -p:PackageProjectUrl="${{ vars.NUGETPACKPROJECTURL }}" -c Release src/Acumen/
+          run: dotnet pack -p:Authors="${{ vars.NUGETPACKAUTHORS }}" -p:Copyright="${{ vars.NUGETPACKCOPYRIGHT }}" -p:PackageProjectUrl="${{ vars.NUGETPACKPROJECTURL }}" -c Release -o artifacts src/Acumen.sln
 
         - name: Push
-          run: dotnet nuget push src/Acumen/bin/Release/AcumenRx.*.nupkg -k ${{ secrets.NUGETAPIKEY }} -s ${{ vars.NUGETPUSHSOURCE }} --skip-duplicate
+          run: dotnet nuget push "artifacts/*.nupkg" -k ${{ secrets.NUGETAPIKEY }} -s ${{ vars.NUGETPUSHSOURCE }} --skip-duplicate

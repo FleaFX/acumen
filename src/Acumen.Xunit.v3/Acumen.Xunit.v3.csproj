@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Acumen</RootNamespace>
+    <PackageId>AcumenRx.Xunit.v3</PackageId>
+    <Description>xUnit v3 integration for AcumenRx: provides the [MarbleTest] attribute.</Description>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 1.0.0 is the lowest version providing Before/After(MethodInfo, IXunitTest); keep it low so any xunit.v3 1.x-4.x consumer can use it. -->
+    <PackageReference Include="xunit.v3.extensibility.core" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Acumen\Acumen.csproj" />
+  </ItemGroup>
+
+</Project>
