@@ -17,6 +17,11 @@ jobs:
 
         runs-on: ubuntu-latest
 
+        # Required for NuGet Trusted Publishing: lets the job request a GitHub OIDC token.
+        permissions:
+            id-token: write
+            contents: read
+
         steps:
         - uses: actions/checkout@v4
   
@@ -29,5 +34,12 @@ jobs:
         - name: Pack
           run: dotnet pack -p:Authors="${{ vars.NUGETPACKAUTHORS }}" -p:Copyright="${{ vars.NUGETPACKCOPYRIGHT }}" -p:PackageProjectUrl="${{ vars.NUGETPACKPROJECTURL }}" -c Release -o artifacts src/Acumen.sln
 
+        # Trusted Publishing: exchanges the GitHub OIDC token for a short-lived NuGet API key.
+        - name: NuGet login
+          uses: NuGet/login@v1
+          id: nuget-login
+          with:
+            user: ${{ vars.NUGETUSER }}
+
         - name: Push
-          run: dotnet nuget push "artifacts/*.nupkg" -k ${{ secrets.NUGETAPIKEY }} -s ${{ vars.NUGETPUSHSOURCE }} --skip-duplicate
+          run: dotnet nuget push "artifacts/*.nupkg" -k ${{ steps.nuget-login.outputs.NUGET_API_KEY }} -s ${{ vars.NUGETPUSHSOURCE }} --skip-duplicate
